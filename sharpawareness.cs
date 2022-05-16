@@ -11,12 +11,50 @@ using System.Windows;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
-
-//My github - https://github.com/CodeXTF2
+using System.ComponentModel;
+/*
+SharpAwareness - A light and more OPSEC friendly way for red teamers to gain quick situational awareness of both the host and the user.
+https://github.com/CodeXTF2/SharpAwareness
+*/
 namespace sad{
+internal class Win32
+{
+    public const int ErrorSuccess = 0;
 
+    [DllImport("Netapi32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
+    public static extern int NetGetJoinInformation(string server, out IntPtr domain, out NetJoinStatus status);
+
+    [DllImport("Netapi32.dll")]
+    public static extern int NetApiBufferFree(IntPtr Buffer);
+
+    public enum NetJoinStatus
+    {
+        NetSetupUnknownStatus = 0,
+        NetSetupUnjoined,
+        NetSetupWorkgroupName,
+        NetSetupDomainName
+    }
+
+}
     class Program{
-
+    public static bool IsInDomain()
+    {
+        Win32.NetJoinStatus status = Win32.NetJoinStatus.NetSetupUnknownStatus;
+        IntPtr pDomain = IntPtr.Zero;
+        int result = Win32.NetGetJoinInformation(null, out pDomain, out status);
+        if (pDomain != IntPtr.Zero)
+        {
+            Win32.NetApiBufferFree(pDomain);
+        }
+        if (result == Win32.ErrorSuccess)
+        {
+            return status == Win32.NetJoinStatus.NetSetupDomainName;
+        }
+        else
+        {
+            throw new Exception("Domain Info Get Failed", new Win32Exception());
+        }
+    }
         public static string[] edrlist =
         {
                 "activeconsole",
@@ -157,6 +195,7 @@ public static string GetActiveWindowTitle()
             string edrstrings = "";
             try{
                 Console.WriteLine(" >> SharpAwareness << - by CodeX\n");
+                Console.WriteLine("\n[*] Starting host recon");
                 try{
                 //Get Windows Version
                     Console.WriteLine("\n[*] Windows Version:\n" + GetVersionInfo() + "\n");
@@ -322,6 +361,12 @@ public static string GetActiveWindowTitle()
                     }
                 }catch{
                     Console.WriteLine("\n[!] Failed to locate EDR strings");
+                }
+                Console.WriteLine("\n[*] Checking for Active Directory");
+                if(IsInDomain()){
+                    Console.WriteLine("Host IS domain joined.");
+                }else{
+                    Console.WriteLine("Host is NOT domain joined.");
                 }
 
             //RIP my code broke :(

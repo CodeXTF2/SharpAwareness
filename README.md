@@ -9,7 +9,7 @@ Development roadmap (in order):
 2. Host enum
     - RDP check
     - Network shares
-    - EDRs installed
+    - ~~EDRs installed~~
     - Local admins and groups
     - Remake process list - add parent child relationships
 3. Add basic active directory recon - very minimal to avoid noise
