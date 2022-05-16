@@ -16,11 +16,115 @@ using System.Drawing;
 namespace sad{
 
     class Program{
+
+        public static string[] edrlist =
+        {
+                "activeconsole",
+                "amsi.dll",
+                "anti malware",
+                "anti-malware",
+                "antimalware",
+                "anti virus",
+                "anti-virus",
+                "antivirus",
+                "appsense",
+                "authtap",
+                "avast",
+                "avecto",
+                "canary",
+                "carbonblack",
+                "carbon black",
+                "cb.exe",
+                "ciscoamp",
+                "cisco amp",
+                "countercept",
+                "countertack",
+                "cramtray",
+                "crssvc",
+                "crowdstrike",
+                "csagent",
+                "csfalcon",
+                "csshell",
+                "cybereason",
+                "cyclorama",
+                "cylance",
+                "cyoptics",
+                "cyupdate",
+                "cyvera",
+                "cyserver",
+                "cytray",
+                "darktrace",
+                "defendpoint",
+                "defender",
+                "eectrl",
+                "elastic",
+                "endgame",
+                "f-secure",
+                "forcepoint",
+                "fireeye",
+                "groundling",
+                "GRRservic",
+                "inspector",
+                "ivanti",
+                "kaspersky",
+                "lacuna",
+                "logrhythm",
+                "malware",
+                "mandiant",
+                "mcafee",
+                "morphisec",
+                "msascuil",
+                "msmpeng",
+                "nissrv",
+                "omni",
+                "omniagent",
+                "osquery",
+                "Palo Alto Networks",
+                "pgeposervice",
+                "pgsystemtray",
+                "privilegeguard",
+                "procwall",
+                "protectorservic",
+                "qradar",
+                "redcloak",
+                "secureworks",
+                "securityhealthservice",
+                "semlaunchsv",
+                "sentinel",
+                "sepliveupdat",
+                "sisidsservice",
+                "sisipsservice",
+                "sisipsutil",
+                "smc.exe",
+                "smcgui",
+                "snac64",
+                "sophos",
+                "splunk",
+                "srtsp",
+                "symantec",
+                "symcorpu",
+                "symefasi",
+                "sysinternal",
+                "sysmon",
+                "tanium",
+                "tda.exe",
+                "tdawork",
+                "tpython",
+                "vectra",
+                "wincollect",
+                "windowssensor",
+                "wireshark",
+                "threat",
+                "xagt.exe",
+                "xagtnotif.exe"
+        };
 [DllImport("user32.dll")]
 static extern IntPtr GetForegroundWindow();
 
 [DllImport("user32.dll")]
 static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+
 
 public static string GetActiveWindowTitle()
 {
@@ -50,6 +154,7 @@ public static string GetActiveWindowTitle()
 
 
         public static void Main(string[] args){
+            string edrstrings = "";
             try{
                 Console.WriteLine(" >> SharpAwareness << - by CodeX\n");
                 try{
@@ -79,14 +184,14 @@ public static string GetActiveWindowTitle()
                     Console.WriteLine("\n[*] Installed programs:");
                     for (int i = 0; i < programfiles.Length; i++)
                     {
-        
+                        edrstrings += programfiles[i];
                         Console.WriteLine(programfiles[i]);
                         
                     }
                     var programfiles2 = Directory.GetDirectories("C:\\Program Files (x86)");
                     for (int i = 0; i < programfiles2.Length; i++)
                     {
-        
+                        edrstrings += programfiles[i];
                         Console.WriteLine(programfiles2[i]);
                         
                     }
@@ -102,8 +207,11 @@ public static string GetActiveWindowTitle()
                     {  
                         try{
                             Console.WriteLine(p.Id + " " + p.ProcessName + " - " + p.MainModule.FileVersionInfo.FileDescription);
+                            edrstrings += p.ProcessName;
+                            edrstrings += p.MainModule.FileVersionInfo.FileDescription;
                         }catch{
                             Console.WriteLine(p.Id + " " + p.ProcessName); 
+                            edrstrings += p.ProcessName;
                         }
         
                     }  
@@ -140,6 +248,19 @@ public static string GetActiveWindowTitle()
                     }
                 }catch{
                     Console.WriteLine("\n[!] Failed to enumerate logical drives");
+                }
+
+                //Proxy settings
+                try{
+                    Console.WriteLine("\n[!] Enumerating IE proxy settings");
+                    var uri = WebRequest.DefaultWebProxy.GetProxy(new Uri("http://www.google.com"));
+                    if(uri.ToString() != "http://www.google.com/"){
+                        Console.WriteLine("Proxy address: " + uri.ToString());
+                    }else{
+                        Console.WriteLine("No proxy configured");
+                    }
+                }catch{
+                    Console.WriteLine("\n[!] Failed to enumerate proxy settings");
                 }
 
                 //Take screenshot
@@ -190,9 +311,22 @@ public static string GetActiveWindowTitle()
                     Console.WriteLine("\n[!] Failed to enumerate last logon times");
                 }
 
+                //EDRs installed?
+                try{
+                    Console.WriteLine("\n[*] Identifying EDR products");
+                    
+                    foreach(string s in edrlist){
+                        if (edrstrings.ToLower().Contains(s)){
+                            Console.WriteLine("- " + s);
+                        }
+                    }
+                }catch{
+                    Console.WriteLine("\n[!] Failed to locate EDR strings");
+                }
 
+            //RIP my code broke :(
             }catch{
-                Console.WriteLine("SharpAwareness broke :( At least we didn't kill your beacon!");
+                Console.WriteLine("\n[!] SharpAwareness crashed :(");
             }
         
         }
