@@ -49,74 +49,96 @@ public static string GetActiveWindowTitle()
 
         public static void Main(string[] args){
             try{
-            Console.WriteLine(" >> SharpAwareness << - by CodeX\n");
-
-            //Get Windows Version
-            Console.WriteLine("[*] Windows Version:\n" + GetVersionInfo() + "\n");
-
-            //Get users that have logged in to this box
-            var localusers = Directory.GetDirectories("C:\\Users");
-            Console.WriteLine("[*] Local users:");
-            for (int i = 0; i < localusers.Length; i++)
-            {
-                if(localusers[i] != "C:\\Users\\Public" && localusers[i] != "C:\\Users\\All Users"){
-                    Console.WriteLine(localusers[i]);
-                }
-            }
-
-            //Installed programs
-            var programfiles = Directory.GetDirectories("C:\\Program Files");
-            Console.WriteLine("[*] Installed programs:");
-            for (int i = 0; i < programfiles.Length; i++)
-            {
- 
-                Console.WriteLine(programfiles[i]);
-                
-            }
-            var programfiles2 = Directory.GetDirectories("C:\\Program Files (x86)");
-            for (int i = 0; i < programfiles2.Length; i++)
-            {
- 
-                Console.WriteLine(programfiles2[i]);
-                
-            }
-
-            //Running processes
-            Console.WriteLine("\n[*] Running processes:");
-            Process[] processCollection = Process.GetProcesses();  
-            foreach (Process p in processCollection)  
-            {  
+                Console.WriteLine(" >> SharpAwareness << - by CodeX\n");
                 try{
-                    Console.WriteLine(p.Id + " " + p.ProcessName + " - " + p.MainModule.FileVersionInfo.FileDescription);
+                //Get Windows Version
+                    Console.WriteLine("[*] Windows Version:\n" + GetVersionInfo() + "\n");
                 }catch{
-                    Console.WriteLine(p.Id + " " + p.ProcessName); 
+                    Console.WriteLine("[!] Failed to get Windows version");
                 }
- 
-            }  
 
-            //Foreground window
-
-
-            Console.WriteLine("\n[*] Open windows - What is our user doing?:");
-            Process[] processlist = Process.GetProcesses();
-
-            foreach (Process process in processlist)
-            {
-                if (!String.IsNullOrEmpty(process.MainWindowTitle))
-                {
-                    Console.WriteLine("Process: {0} ID: {1} Window title: {2}", process.ProcessName, process.Id, process.MainWindowTitle);
+                try{
+                    //Get users that have logged in to this box
+                    var localusers = Directory.GetDirectories("C:\\Users");
+                    Console.WriteLine("[*] Local users:");
+                    for (int i = 0; i < localusers.Length; i++)
+                    {
+                        if(localusers[i] != "C:\\Users\\Public" && localusers[i] != "C:\\Users\\All Users"){
+                            Console.WriteLine(localusers[i]);
+                        }
+                    }
+                }catch{
+                    Console.WriteLine("[!] Failed to enumerate local users");
                 }
-            }
-            Console.WriteLine("\n[*] Foreground window");
-            Console.WriteLine(GetActiveWindowTitle());
-            //Drives
-            Console.WriteLine("\n[*] Logical drives");
-            string[] drives = System.IO.Directory.GetLogicalDrives();
 
-            foreach (string str in drives) 
-            {
-                System.Console.WriteLine(str);
-            }
+                try{
+                    //Installed programs
+                    var programfiles = Directory.GetDirectories("C:\\Program Files");
+                    Console.WriteLine("[*] Installed programs:");
+                    for (int i = 0; i < programfiles.Length; i++)
+                    {
+        
+                        Console.WriteLine(programfiles[i]);
+                        
+                    }
+                    var programfiles2 = Directory.GetDirectories("C:\\Program Files (x86)");
+                    for (int i = 0; i < programfiles2.Length; i++)
+                    {
+        
+                        Console.WriteLine(programfiles2[i]);
+                        
+                    }
+                }catch{
+                    Console.WriteLine("[!] Failed to enumerate installed programs");
+                }
+
+                try{
+                    //Running processes
+                    Console.WriteLine("\n[*] Running processes:");
+                    Process[] processCollection = Process.GetProcesses();  
+                    foreach (Process p in processCollection)  
+                    {  
+                        try{
+                            Console.WriteLine(p.Id + " " + p.ProcessName + " - " + p.MainModule.FileVersionInfo.FileDescription);
+                        }catch{
+                            Console.WriteLine(p.Id + " " + p.ProcessName); 
+                        }
+        
+                    }  
+                }catch{
+                    Console.WriteLine("[!] Failed to enumerate running processes");
+                }
+
+                //Foreground window
+
+                try{
+                    Console.WriteLine("\n[*] Open windows - What is our user doing?:");
+                    Process[] processlist = Process.GetProcesses();
+
+                    foreach (Process process in processlist)
+                    {
+                        if (!String.IsNullOrEmpty(process.MainWindowTitle))
+                        {
+                            Console.WriteLine("Process: {0} ID: {1} Window title: {2}", process.ProcessName, process.Id, process.MainWindowTitle);
+                        }
+                    }
+                    Console.WriteLine("\n[*] Foreground window");
+                    Console.WriteLine(GetActiveWindowTitle());
+                }catch{
+                    Console.WriteLine("[!] Failed to list open windows");
+                }
+                try{
+                    //Drives
+                    Console.WriteLine("\n[*] Logical drives");
+                    string[] drives = System.IO.Directory.GetLogicalDrives();
+
+                    foreach (string str in drives) 
+                    {
+                        System.Console.WriteLine(str);
+                    }
+                }catch{
+                    Console.WriteLine("[!] Failed to enumerate logical drives");
+                }
 
 
             }catch{
