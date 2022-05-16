@@ -38,10 +38,23 @@ This .NET assembly is intended to be compatible with Beacon's execute-assembly b
 - Registry queries
 - Directory listing
 
-I try to be as light as possible, but consider patching ETW.
+I try not to be too noisy, but consider patching ETW.
 
 ## Information checked for
-- 
+### What is this host used for?
+    - Installed programs
+    - Drives
+### What is the current user doing on this host?
+    - Open windows
+    - Foreground window
+### What kind of user is the current user?
+    - Privileges (TBA)
+    - Network resources they have access to (TBA)
+### What kind of environment is this? (in general)
+    - Active Directory info (TBA)
+    - Running processes
+    - Services (TBA)
+    - Autoruns (TBA)
 
 
 ## Credits
