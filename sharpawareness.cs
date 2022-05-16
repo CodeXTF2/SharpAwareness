@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 //My github - https://github.com/CodeXTF2
 namespace sad{
@@ -52,15 +53,15 @@ public static string GetActiveWindowTitle()
                 Console.WriteLine(" >> SharpAwareness << - by CodeX\n");
                 try{
                 //Get Windows Version
-                    Console.WriteLine("[*] Windows Version:\n" + GetVersionInfo() + "\n");
+                    Console.WriteLine("\n[*] Windows Version:\n" + GetVersionInfo() + "\n");
                 }catch{
-                    Console.WriteLine("[!] Failed to get Windows version");
+                    Console.WriteLine("\n[!] Failed to get Windows version");
                 }
 
                 try{
                     //Get users that have logged in to this box
                     var localusers = Directory.GetDirectories("C:\\Users");
-                    Console.WriteLine("[*] Local users:");
+                    Console.WriteLine("\n[*] Local users:");
                     for (int i = 0; i < localusers.Length; i++)
                     {
                         if(localusers[i] != "C:\\Users\\Public" && localusers[i] != "C:\\Users\\All Users"){
@@ -68,13 +69,13 @@ public static string GetActiveWindowTitle()
                         }
                     }
                 }catch{
-                    Console.WriteLine("[!] Failed to enumerate local users");
+                    Console.WriteLine("\n[!] Failed to enumerate local users");
                 }
 
                 try{
                     //Installed programs
                     var programfiles = Directory.GetDirectories("C:\\Program Files");
-                    Console.WriteLine("[*] Installed programs:");
+                    Console.WriteLine("\n[*] Installed programs:");
                     for (int i = 0; i < programfiles.Length; i++)
                     {
         
@@ -89,7 +90,7 @@ public static string GetActiveWindowTitle()
                         
                     }
                 }catch{
-                    Console.WriteLine("[!] Failed to enumerate installed programs");
+                    Console.WriteLine("\n[!] Failed to enumerate installed programs");
                 }
 
                 try{
@@ -106,7 +107,7 @@ public static string GetActiveWindowTitle()
         
                     }  
                 }catch{
-                    Console.WriteLine("[!] Failed to enumerate running processes");
+                    Console.WriteLine("\n[!] Failed to enumerate running processes");
                 }
 
                 //Foreground window
@@ -125,7 +126,7 @@ public static string GetActiveWindowTitle()
                     Console.WriteLine("\n[*] Foreground window");
                     Console.WriteLine(GetActiveWindowTitle());
                 }catch{
-                    Console.WriteLine("[!] Failed to list open windows");
+                    Console.WriteLine("\n[!] Failed to list open windows");
                 }
                 try{
                     //Drives
@@ -137,7 +138,31 @@ public static string GetActiveWindowTitle()
                         System.Console.WriteLine(str);
                     }
                 }catch{
-                    Console.WriteLine("[!] Failed to enumerate logical drives");
+                    Console.WriteLine("\n[!] Failed to enumerate logical drives");
+                }
+
+                //Take screenshot
+                try{
+                    Console.WriteLine("\n[*] Taking screenshot");
+                    Bitmap memoryImage;
+
+                    memoryImage = new Bitmap(1920, 1080);
+                    Size s = new Size(memoryImage.Width, memoryImage.Height);
+        
+                    Graphics memoryGraphics = Graphics.FromImage(memoryImage);
+        
+                    memoryGraphics.CopyFromScreen(0, 0, 0, 0, s);
+        
+                    //That's it! Save the image in the directory and this will work like charm.
+                    string fileName = string.Format(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+                            @"\tmp" + "_" +
+                            DateTime.Now.ToString("hhmmss") + ".tmp");
+        
+                    // save it
+                    memoryImage.Save(fileName);
+                    Console.WriteLine("- Screenshot saved as " + fileName);
+                }catch{
+                    Console.WriteLine("\n[!] Failed to take screenshot");
                 }
 
 
