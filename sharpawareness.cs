@@ -163,7 +163,12 @@ static extern IntPtr GetForegroundWindow();
 static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
 
+public static void printBanner(){
+    Console.WriteLine("   /@(.  ,@&  &@, .,%#        \n   @       &@@       .@       \n   /  @@@  &@@  @@@  .@       \n   /@@@  @ &@@@@@  @..@       \n   /@@@@@@ &@@@@@@@@,.@       \n   @.      &(@(      @*       \n    .@@@@@#    @@@@@@         \nSharpAwareness - by CodeX");
 
+
+
+}
 public static string GetActiveWindowTitle()
 {
     const int nChars = 256;
@@ -193,8 +198,9 @@ public static string GetActiveWindowTitle()
 
         public static void Main(string[] args){
             string edrstrings = "";
+
             try{
-                Console.WriteLine(" >> SharpAwareness << - by CodeX\n");
+                printBanner();
                 Console.WriteLine("\n[*] Starting host recon");
                 try{
                 //Get Windows Version
