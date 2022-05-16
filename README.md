@@ -14,8 +14,8 @@ Development roadmap (in order):
     - Domain controller name
 3. Add user awareness
     - ~~Foreground window~~
-    - Logon logoff times
-    - Screenshot of desktop
+    - ~~Logon logoff times~~
+    - ~~Screenshot of desktop~~
 
 ## Overview  
 This is intended to be a light and more opsec friendly way for red teamers to gain quick situational awareness of both the host and the user. This is more oriented towards red team engagements than privilege escalation challenges, as it has a focus on the user and situational aspects of the system.  

@@ -4,6 +4,7 @@ using System.Security.Principal;
 using System.Management;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.DirectoryServices;
 using System.Net;
 using System.IO;
 using System.Windows;
@@ -61,7 +62,7 @@ public static string GetActiveWindowTitle()
                 try{
                     //Get users that have logged in to this box
                     var localusers = Directory.GetDirectories("C:\\Users");
-                    Console.WriteLine("\n[*] Local users:");
+                    Console.WriteLine("\n[*] Local user folders:");
                     for (int i = 0; i < localusers.Length; i++)
                     {
                         if(localusers[i] != "C:\\Users\\Public" && localusers[i] != "C:\\Users\\All Users"){
@@ -69,7 +70,7 @@ public static string GetActiveWindowTitle()
                         }
                     }
                 }catch{
-                    Console.WriteLine("\n[!] Failed to enumerate local users");
+                    Console.WriteLine("\n[!] Failed to enumerate local user folders");
                 }
 
                 try{
@@ -163,6 +164,30 @@ public static string GetActiveWindowTitle()
                     Console.WriteLine("- Screenshot saved as " + fileName);
                 }catch{
                     Console.WriteLine("\n[!] Failed to take screenshot");
+                }
+
+                //Logon times
+                Console.WriteLine("\n[*] Enumerating logon logoff times");
+                try{
+                    DirectoryEntry dirs = new DirectoryEntry("WinNT://" + Environment.MachineName);
+                    foreach (DirectoryEntry de in dirs.Children)
+                    {
+                        if (de.SchemaClassName == "User")
+                        {
+                            Console.WriteLine("Name: " + de.Name);
+                            if (de.Properties["lastlogin"].Value != null)
+                            {
+                                Console.WriteLine("Last login: " + de.Properties["lastlogin"].Value.ToString());
+                            }
+                            if (de.Properties["lastlogoff"].Value != null)
+                            {
+                                Console.WriteLine("Last logoff: " + de.Properties["lastlogoff"].Value.ToString());
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                }catch{
+                    Console.WriteLine("\n[!] Failed to enumerate last logon times");
                 }
 
 
