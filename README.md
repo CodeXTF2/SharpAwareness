@@ -48,6 +48,7 @@ I try not to be too noisy, but consider patching ETW.
 ### What is the current user doing on this host?
     - Open windows
     - Foreground window
+    - Logon logoff times
 ### What kind of user is the current user?
     - Privileges (TBA)
     - Network resources they have access to (TBA)
@@ -56,6 +57,8 @@ I try not to be too noisy, but consider patching ETW.
     - Running processes
     - Services (TBA)
     - Autoruns (TBA)
+    - Proxy settings
+    - Security products installed
 
 
 ## Credits

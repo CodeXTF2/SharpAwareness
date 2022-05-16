@@ -313,7 +313,7 @@ public static string GetActiveWindowTitle()
 
                 //EDRs installed?
                 try{
-                    Console.WriteLine("\n[*] Identifying EDR products");
+                    Console.WriteLine("\n[*] Identifying security products");
                     
                     foreach(string s in edrlist){
                         if (edrstrings.ToLower().Contains(s)){
