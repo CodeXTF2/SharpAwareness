@@ -164,10 +164,7 @@ static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
 
 public static void printBanner(){
-    Console.WriteLine("   /@(.  ,@&  &@, .,%#        \n   @       &@@       .@       \n   /  @@@  &@@  @@@  .@       \n   /@@@  @ &@@@@@  @..@       \n   /@@@@@@ &@@@@@@@@,.@       \n   @.      &(@(      @*       \n    .@@@@@#    @@@@@@         \nSharpAwareness - by CodeX");
-
-
-
+    Console.WriteLine("\nSharpAwareness - by CodeX");
 }
 public static string GetActiveWindowTitle()
 {
@@ -248,6 +245,7 @@ public static string GetActiveWindowTitle()
                     //Running processes
                     Console.WriteLine("\n[*] Running processes:");
                     Process[] processCollection = Process.GetProcesses();  
+                    
                     foreach (Process p in processCollection)  
                     {  
                         try{
